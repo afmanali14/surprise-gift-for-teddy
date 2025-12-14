@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Friendship Gifts</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+body{
+    margin:0;
+    font-family:'Poppins',sans-serif;
+    background: linear-gradient(135deg,#b8f1cc,#b3e5ff);
+    height:100vh;
+    overflow:hidden;
+}
+
+/* Gift area */
+#gifts{
+    position:relative;
+    width:100%;
+    height:100%;
+}
+
+/* Gift box */
+.gift{
+    position:absolute;
+    font-size:48px;
+    cursor:pointer;
+    animation:pulse 1.8s infinite;
+}
+
+@keyframes pulse{
+    0%{transform:scale(1);}
+    50%{transform:scale(1.15);}
+    100%{transform:scale(1);}
+}
+
+/* Display overlay */
+#display{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(255,255,255,0.6);
+    backdrop-filter: blur(6px);
+    z-index:5;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    padding:20px;
+}
+
+#display img{
+    max-width:80%;
+    max-height:55vh;
+    border-radius:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.25);
+}
+
+#line{
+    margin-top:20px;
+    text-align:center;
+    font-size:16px;
+    background:rgba(255,255,255,0.85);
+    padding:15px 20px;
+    border-radius:20px;
+}
+
+/* Return button */
+#returnBtn{
+    position:fixed;
+    bottom:20px;
+    left:20px;
+    padding:12px 18px;
+    border:none;
+    border-radius:25px;
+    background:#4fb6ff;
+    color:white;
+    font-size:14px;
+    cursor:pointer;
+    display:none;
+    z-index:6;
+}
+</style>
+</head>
+
+<body>
+
+<div id="gifts"></div>
+
+<div id="display">
+    <img id="displayImg">
+    <div id="line"></div>
+</div>
+
+<button id="returnBtn">Tap another gift 🎁</button>
+
+<script>
+const giftsData = [
+ {img:"https://i.postimg.cc/Dyj5pz8F/Harman_5.jpg", line:"Ajj tera yaadometer 98% te rukeya hoya... explain k eve kyu?? 😳🎀"},
+ {img:"https://i.postimg.cc/RCJBBG33/missing_someone.png", line:"Aaaaaluuu is missing someone veryyyyyy much..... guess who? 🤭💛"},
+ {img:"https://i.postimg.cc/GhM95q68/aloo_hugging_golgappa.jpg", line:"Dil kehnda: 'Go hug your Golgappa right now' , so sending you a warm virtual hug at 150km/h 🤗💖"},
+ {img:"https://i.postimg.cc/xCnvgkDF/similing_Aloooo.jpg", line:"Warning: Aaalu's happiness increased when you tapped this 😄💚"},
+ {img:"https://i.postimg.cc/CKjG0MLn/harman_9.jpg", line:"Your friend is 110% pagal about our friendship 🤪💚"},
+ {img:"https://i.postimg.cc/Nf0jmRLQ/you_matter_bohoooot.jpg", line:"Dil di vibe keh rahi: You matter..... oh v bohooooot shaaara 🌿💛"},
+ {img:"https://i.postimg.cc/MpH3zQhT/Harman_4.jpg", line:"Iss saal ne ik cheez sikhayi- You're really really special to me 🩵✨"},
+ {img:"https://i.postimg.cc/mkSpgNLt/Harman_3.jpg", line:"Your smile is the real gift here. Always keep it 😊🎀"},
+ {img:"https://i.postimg.cc/d0dB0mnq/Harman_6.jpg", line:"I hope this surprise made your day a little better 🌸💖"},
+ {img:"https://i.postimg.cc/SRXLw6nD/hrmn_15.jpg", line:"The world is softer and brighter with you in it ✨💙"},
+ {img:"https://i.postimg.cc/4y4bBCGy/Harman_7.jpg", line:"Thank you for being such a sweet, grounded, positive person 🌿🤍"},
+ {img:"https://i.postimg.cc/W1qm96B4/Harman_8.jpg", line:"You're strong, kind, caring.... and that's rare, stay like that 🌸💛"},
+ {img:"https://i.postimg.cc/C5wJXBj6/harman_4.jpg", line:"A little surprise...... for a person who truly deserves it 🎁💖"},
+ {img:"https://i.postimg.cc/d0dB0mnq/Harman_6.jpg", line:"You are someone who deserves all the lovely things in life ✨🤗"},
+ {img:"https://i.postimg.cc/d1jghKnZ/my_photo.jpg", line:"And here's the SPECIAL GIFT, as per your jnaab mdm ji 💛🎀"}
+];
+
+const giftsDiv = document.getElementById("gifts");
+const display = document.getElementById("display");
+const displayImg = document.getElementById("displayImg");
+const lineDiv = document.getElementById("line");
+const returnBtn = document.getElementById("returnBtn");
+
+let activeIndex = null;
+
+/* Non-overlapping random positions (grid shuffle) */
+const positions = [];
+for(let r=10;r<=80;r+=20){
+  for(let c=10;c<=80;c+=20){
+    positions.push({top:r,left:c});
+  }
+}
+positions.sort(()=>Math.random()-0.5);
+
+/* Render gifts */
+giftsData.forEach((gift,i)=>{
+    const g = document.createElement("div");
+    g.className="gift";
+    g.textContent="🎁";
+    g.style.top = positions[i].top+"%";
+    g.style.left = positions[i].left+"%";
+
+    g.onclick = ()=>{
+        activeIndex = i;
+        display.style.display="flex";
+        displayImg.src = gift.img;
+        lineDiv.textContent = gift.line;
+        returnBtn.style.display="block";
+        g.style.display="none";
+    };
+    giftsDiv.appendChild(g);
+});
+
+/* Return button */
+returnBtn.onclick = ()=>{
+    display.style.display="none";
+    returnBtn.style.display="none";
+};
+</script>
+
+</body>
+</html>
