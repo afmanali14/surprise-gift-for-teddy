@@ -37,7 +37,7 @@ body{
     100%{transform:scale(1);}
 }
 
-/* Display overlay */
+/* Overlay */
 #display{
     display:none;
     position:fixed;
@@ -121,9 +121,7 @@ const displayImg = document.getElementById("displayImg");
 const lineDiv = document.getElementById("line");
 const returnBtn = document.getElementById("returnBtn");
 
-let activeIndex = null;
-
-/* Non-overlapping random positions (grid shuffle) */
+/* Create non-overlapping positions */
 const positions = [];
 for(let r=10;r<=80;r+=20){
   for(let c=10;c<=80;c+=20){
@@ -141,13 +139,13 @@ giftsData.forEach((gift,i)=>{
     g.style.left = positions[i].left+"%";
 
     g.onclick = ()=>{
-        activeIndex = i;
         display.style.display="flex";
         displayImg.src = gift.img;
         lineDiv.textContent = gift.line;
         returnBtn.style.display="block";
         g.style.display="none";
     };
+
     giftsDiv.appendChild(g);
 });
 
